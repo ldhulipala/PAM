@@ -14,7 +14,7 @@ struct augmented_ops : Map {
   using GC = typename Map::GC;
   using K = typename Map::K;
   using aug_t = typename Entry::aug_t;
-  
+
   static inline aug_t aug_val(node* b) {
 	  if (!b) return Entry::get_empty();
 	  return b->entry.second;
@@ -62,10 +62,10 @@ struct augmented_ops : Map {
     node* r = Map::range_root(b, key_left, key_right);
     if (r) {
       // add in left side (right of or at key_left)
-      aug_sum_right(r->lc, key_left, a);  
+      aug_sum_right(r->lc, key_left, a);
       a.add_entry(Map::get_entry(r));   // add in middle
       // add in right side (left of or at key_right)
-      aug_sum_left(r->rc, key_right, a);  
+      aug_sum_left(r->rc, key_right, a);
     }
   }
 
@@ -79,12 +79,20 @@ struct augmented_ops : Map {
     } return aug_select(b->lc, f);
   }
 
+  static node* aug_eq(node* b, aug_t query) {
+    if (b == NULL) return NULL;
+    assert(aug_val(b) == query);
+    if (Entry::from_entry(Map::get_entry(b)) == query) return b;
+    else if (aug_val(b->lc) == query) return aug_eq(b->lc, query);
+    return aug_eq(b->rc, query);
+  }
+
   template<class Func>
   static node* aug_filter(node* b, const Func& f, bool extra_ptr = false) {
     if (!b) return NULL;
     if (!f(aug_val(b))) return NULL;
     bool copy = extra_ptr || (b->ref_cnt > 1);
-    
+
     auto P = utils::fork<node*>(Map::size(b) >= utils::node_limit,
 	        [&]() {return aug_filter(b->lc, f, copy);},
 		[&]() {return aug_filter(b->rc, f, copy);});

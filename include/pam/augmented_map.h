@@ -56,6 +56,10 @@ public:
   maybe_E aug_select(Func f) {
     return Map::node_to_entry(Tree::aug_select(Map::root, f));};
 
+  maybe_E aug_eq(A aug_val) {
+    return Map::node_to_entry(Tree::aug_eq(Map::root, aug_val));
+  }
+
   static M insert_lazy(M m, const E& p) {
     auto replace = [] (const V& a, const V& b) {return b;};
     return M(Tree::insert_lazy(m.get_root(), p, replace)); }
@@ -106,6 +110,10 @@ public:
   static M upTo(M& a, K kr) {return to_aug(Map::upTo(a,kr));}
   template<class Ma, class F>
   static M map(Ma a, const F f) {return to_aug(Map::map(a, f));}
+  template<class F>
+  static void map_void(M& a, const F& f,
+                       size_t granularity=utils::node_limit) {
+    return Map::map_void(a, f, granularity); }
   static void entries(M m, E* out) { Map::entries(std::move(m),out);}
   template <class outItter>
   static void keys(M m, outItter out) {Map::keys(std::move(m),out);}

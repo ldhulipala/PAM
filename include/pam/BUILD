@@ -88,8 +88,8 @@ cc_library(
 )
 
 cc_library(
-  name = "cpam",
-  hdrs = ["cpam.h"],
+  name = "pam",
+  hdrs = ["pam.h"],
   deps = [
   ":basic_node",
   ":augmented_node",
