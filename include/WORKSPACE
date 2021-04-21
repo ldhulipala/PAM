@@ -4,5 +4,5 @@ cc_configure()
 local_repository(
     name = "parlaylib",
     #path = "/usr0/home/ldhulipa/current/gbbs_feature/external/parlaylib/include",
-    path = "../parlaylib/include",
+    path = "../../parlaylib/include",
 )
