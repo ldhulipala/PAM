@@ -59,12 +59,12 @@ namespace utils {
   template <typename ET>
   inline bool atomic_compare_and_swap(ET* a, ET oldval, ET newval) {
     static_assert(sizeof(ET) <= 8, "Bad CAS length");
-    if (sizeof(ET) == 1) {
+    if constexpr (sizeof(ET) == 1) {
       uint8_t r_oval, r_nval;
       memcpy(&r_oval, &oldval, sizeof(ET));
       memcpy(&r_nval, &newval, sizeof(ET));
       return __sync_bool_compare_and_swap(reinterpret_cast<uint8_t*>(a), r_oval, r_nval);
-    } else if (sizeof(ET) == 4) {
+    } else if constexpr (sizeof(ET) == 4) {
       uint32_t r_oval, r_nval;
       memcpy(&r_oval, &oldval, sizeof(ET));
       memcpy(&r_nval, &newval, sizeof(ET));

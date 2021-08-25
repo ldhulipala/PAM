@@ -1,5 +1,7 @@
 #pragma once
+#if defined(__GNUC__) && !defined(__clang__)
 #pragma GCC diagnostic ignored "-Wsubobject-linkage"
+#endif
 #include "parlay/utilities.h"
 #include "basic_node.h"
 #include "augmented_node.h"
